@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 class EditCompanies extends Component {
     constructor(props) {
@@ -22,9 +22,9 @@ class EditCompanies extends Component {
     componentDidMount() {
         console.log(this.props.match.params.id);
        //const { handle } = this.props.match.params.id
-        axios.get(SERVER_URL2+'/api/companies/'+this.props.match.params.id,{
+        axios.get(SERVER_URL+'/api/companies/'+this.props.match.params.id,{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -82,9 +82,9 @@ class EditCompanies extends Component {
         updateCompanies.append('website', website);
 
         console.log(updateCompanies);
-        axios.post(SERVER_URL2+'/api/companies/'+this.props.match.params.id, updateCompanies,{
+        axios.post(SERVER_URL+'/api/companies/'+this.props.match.params.id, updateCompanies,{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })

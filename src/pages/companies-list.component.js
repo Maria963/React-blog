@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 
  class CompaniesList extends Component {
@@ -18,15 +18,15 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
     componentDidMount() {
        /* {
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         }) */
 
-        axios.get(SERVER_URL2+'/api/companies',
+        axios.get(SERVER_URL+'/api/companies',
         {
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         }
@@ -41,7 +41,7 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
 
     removeCompany = (id) => {
         console.log(id);
-        const removeFav = this.state.companies.filter(company => company.id != id ) 
+        const removeFav = this.state.companies.filter(company => company.id !== id ) 
         console.log(removeFav);
         this.setState({
             companies: removeFav
@@ -50,9 +50,9 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
 
     deleteCompany = (id) =>  {
         this.removeCompany(id);
-            axios.delete(SERVER_URL2+'/api/companies/'+id, {
+            axios.delete(SERVER_URL+'/api/companies/'+id, {
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 }
             } )
@@ -69,7 +69,7 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
             <td>{currentcompany.name}</td>
             <td>{currentcompany.email}</td>
             <td>  {currentcompany.logo ? (
-      <img style={{width: '50px'}} src = {SERVER_URL2+'/storage/logos/'+currentcompany.logo} />
+      <img style={{width: '50px'}} src = {SERVER_URL+'/storage/logos/'+currentcompany.logo} alt='img' />
       ) : ''} 
       </td>
             <td>{currentcompany.website}</td>

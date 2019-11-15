@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 
 class CreateEmployee  extends Component {
@@ -22,9 +22,9 @@ class CreateEmployee  extends Component {
     }
 
     componentDidMount() {
-        axios.get(SERVER_URL2+'/api/companies',{
+        axios.get(SERVER_URL+'/api/companies',{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -69,7 +69,7 @@ class CreateEmployee  extends Component {
 
     onSubmit = (e) => {
        
-     //   console.log(window.localStorage.getItem('access_token'));
+     //   console.log(localStorage.getItem('access_token'));
         e.preventDefault();
         const {first_name, last_name, company_id, email, phone}  = this.state;
         console.log(`Form submitted:`);
@@ -86,7 +86,7 @@ class CreateEmployee  extends Component {
         console.log(newEmployee);
 
 
-         axios.post( SERVER_URL2+'/api/employees', newEmployee)
+         axios.post( SERVER_URL+'/api/employees', newEmployee)
          .then(res => 
             this.setState({
                 success: 'Employee created',

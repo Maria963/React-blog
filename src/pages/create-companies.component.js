@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 class CreateCompanies extends Component {
     constructor(props) {
@@ -43,7 +43,7 @@ class CreateCompanies extends Component {
     }
 
     onSubmit = (e) => {
-        console.log(window.localStorage.getItem('access_token'));
+        console.log(localStorage.getItem('access_token'));
         e.preventDefault();
         const { name, email,logo, website }  = this.state;
         console.log(`Form submitted:`);
@@ -64,12 +64,12 @@ class CreateCompanies extends Component {
         
            console.log(newCompanies);
           /*let config = {
-            headers: {'Authorization': "bearer " + window.localStorage.getItem('access_token')}
+            headers: {'Authorization': "bearer " + localStorage.getItem('access_token')}
            };*/
 
-          axios.post(SERVER_URL2+'/api/companies', newCompanies,{
+        axios.post(SERVER_URL+'/api/companies', newCompanies,{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })

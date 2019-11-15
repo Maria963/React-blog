@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import  LoginPage  from './pages/LoginPage';
 import  HomePage  from './pages/HomePage';
 import  CompaniesList  from './pages/companies-list.component';
@@ -8,27 +8,30 @@ import EditCompanies from './pages/edit-companies.component';
 import UpdateEmployee from './pages/edit-employee.component';
 import EmployeesList from './pages/employee-list.component';
 import CreateEmployee from './pages/create-employee.component';
-import {  logout } from "./utils/JWTAuth.js";
+import {  logout, isAuth } from "./utils/JWTAuth.js";
+import { PrivateRoute } from './components/PrivateRoute';
 import './App.css';
 
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+    this.state = {
+       isAdmin:  isAuth()
+    };
 
-    }
+}
 
-    logout = () => {
+  /*  logout = () => {
       logout();
-      console.log(window.localStorage.getItem('access_token'));
-    }
+    }*/
 
     render() {
-      
+        console.log(isAuth());
         return (
           <Router>
           <div className="container">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            {/* <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Link to="/home" className="nav-link">Home</Link>
               <div className="collpase navbar-collapse">
                 <ul className="navbar-nav mr-auto">
@@ -44,35 +47,28 @@ class App extends Component {
                   <li className="navbar-item">
                     <Link to="/employees" className="nav-link">Employee</Link>
                   </li> 
-                  <li className="navbar-item">
+                  { console.log(isAuth(), isAdmin) }
+                  {!isAuth()?  <li className="navbar-item">
                     <Link to="/login" className="nav-link">Login</Link>
-                  </li>   
-                  <li className="navbar-item">
+                  </li> : '' }
+                  {isAuth()?   <li className="navbar-item">
                     <Link to="/login" onClick={this.logout} className="nav-link">Logout</Link>
-                  </li>                  
+                  </li> : '' }                  
                 </ul>
               </div>
-            </nav>
+            </nav> */}
             <br/>
-            <Switch>
-            <Route path="/" exact render = {()=> (
-               window.localStorage.getItem('access_token')==null ? (
-                <Redirect exact to ="/login"/>
-               ): (
-                 <Redirect exact to ="/home"/>
-               )
-             )} />
-        
-         
-            <Route path="/home" exact component={HomePage} />
+            
             <Route path="/login" exact component={LoginPage} />
-            <Route path="/create" exact component={CreateCompanies} />
-            <Route path="/companies" exact component={CompaniesList} />
-            <Route path="/companies/:id"  component={EditCompanies} />
-            <Route path="/createemployee" exact component={CreateEmployee} />
-            <Route path="/employees" exact component={EmployeesList} />
-            <Route path="/employees/:id"  component={UpdateEmployee} />
-            </Switch>
+            <PrivateRoute exact path="/" component={HomePage} />
+            <PrivateRoute exact path="/home" component={HomePage} />
+            <PrivateRoute path="/create" exact component={CreateCompanies} />
+            <PrivateRoute path="/companies" exact component={CompaniesList} />
+            <PrivateRoute path="/companies/:id"  component={EditCompanies} />
+            <PrivateRoute path="/createemployee" exact component={CreateEmployee} />
+            <PrivateRoute path="/employees" exact component={EmployeesList} />
+            <PrivateRoute path="/employees/:id"  component={UpdateEmployee} />
+            
           </div>
         </Router>
   

@@ -1,17 +1,6 @@
-import React, { Component } from 'react';
-
-//import { authenticationService } from '../services/authentication.service';
-//import { userService } from '../services/user.service';
+import React from 'react';
 
 class HomePage extends React.Component {
-    constructor(props) {
-        super(props);
-
-    }
-
-    componentDidMount() {
-     
-    }
 
     render() {
        

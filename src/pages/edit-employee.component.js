@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 
 class UpdateEmployee  extends Component {
@@ -23,9 +23,9 @@ class UpdateEmployee  extends Component {
     }
 
     componentDidMount() {
-        axios.get(SERVER_URL2+'/api/companies',{
+        axios.get(SERVER_URL+'/api/companies',{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -37,9 +37,9 @@ class UpdateEmployee  extends Component {
             })
        
         console.log(this.props.match.params.id);
-        axios.get(SERVER_URL2+'/api/employees/'+this.props.match.params.id, {
+        axios.get(SERVER_URL+'/api/employees/'+this.props.match.params.id, {
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -90,7 +90,7 @@ class UpdateEmployee  extends Component {
 
     onSubmit = (e) => {
        
-        console.log(window.localStorage.getItem('access_token'));
+        console.log(localStorage.getItem('access_token'));
         e.preventDefault();
         const {first_name, last_name, company_id, email, phone}  = this.state;
         console.log(`Form submitted:`);
@@ -105,9 +105,9 @@ class UpdateEmployee  extends Component {
 
 
 
-         axios.post( SERVER_URL2+'/api/employees/'+this.props.match.params.id, updateEmployee,{
+         axios.post( SERVER_URL+'/api/employees/'+this.props.match.params.id, updateEmployee,{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -127,7 +127,7 @@ class UpdateEmployee  extends Component {
         const { companies, company_id } = this.state;
         console.log(companies);
         return companies.map((company) => {
-            return <option value={company.id} key={company.id} selected = { company_id == company.id ? 'selected' : ''}>{company.name}</option>
+            return <option value={company.id} key={company.id} selected = { company_id === company.id ? 'selected' : ''}>{company.name}</option>
         })
     }
 

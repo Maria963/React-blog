@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {  SERVER_URL2 } from "../utils/JWTAuth.js";
+import {  SERVER_URL } from "../utils/JWTAuth.js";
 
 
 
@@ -17,9 +17,9 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
     }
 
     componentDidMount() {
-        axios.get(SERVER_URL2+'/api/employees',{
+        axios.get(SERVER_URL+'/api/employees',{
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -36,7 +36,7 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
 
     removeEmployee = (id) => {
         console.log(id);
-        const removeFav = this.state.employees.filter(employee => employee.id != id ) 
+        const removeFav = this.state.employees.filter(employee => employee.id !== id ) 
         console.log(removeFav);
         this.setState({
             employees: removeFav
@@ -46,9 +46,9 @@ import {  SERVER_URL2 } from "../utils/JWTAuth.js";
 
     deleteEmployee = (id) =>  {
         this.removeEmployee(id);
-            axios.delete(SERVER_URL2+'/api/employees/'+id,{
+            axios.delete(SERVER_URL+'/api/employees/'+id,{
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 }
             })

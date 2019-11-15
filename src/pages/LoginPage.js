@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect  } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-//import CreateCompanies from "./pages/create-companies.component";
-//import CompaniesList from "./pages/companies-list.component";
 import { login } from "../utils/JWTAuth.js";
-//import EditTodo from "./components/edit-todo.component";
-//import TodosList from "./components/todos-list.component";
-//import logo from './logo.svg';
-
 
 
 
@@ -18,24 +11,22 @@ class LoginPage extends Component {
     this.state = {
         email: '',
         password: '',
+        error: ''
     }
 } 
 
 onChangeCompaniesEmail = (e) => {
   this.setState({
-      email: e.target.value
+      email: e.target.value,  error: ''
   });
 }
 
 
 onChangeCompaniesPassword = (e) => {
   this.setState({
-      password: e.target.value
+      password: e.target.value,  error: ''
   });
 }
-
-
-
 
 
    login = async (e) => {
@@ -46,31 +37,28 @@ onChangeCompaniesPassword = (e) => {
       password: this.state.password
     };
     let res  = await login(info);
-   
-    if(res==='ok'){
-       // this.setState({ redirect: true});
-       console.log(window.localStorage.getItem('access_token'));
+    console.log(res);
+    if(res===true){
        this.props.history.push('/home');
-      
-    } else{
-      console.log(res)
+    } else {
+      this.setState({
+        error: 'Invalid email or password'
+    });
     }
-    // console.log(window.localStorage.getItem('access_token'));
-    // console.log(token);
-
   }
 
 
 
   render() {
-    const {email,password} = this.state;
+    const {email,password, error} = this.state;
   return (
     <div className="container">
        <h1>Login</h1>
     <div className="row">
       <div>
       <form>
-        <div className="form-group"> 
+      <div className="invalid-feedback" style={{display: 'block'}}>{error}</div>
+      <div className="form-group"> 
                         <label>Email: </label>
                         <input 
                            type="text" 
@@ -90,11 +78,7 @@ onChangeCompaniesPassword = (e) => {
                     </div>
         <button className="btn btn-primary"  onClick = { this.login }>Sign In</button>
       </form>
-
-      </div>  
-
-     
-
+      </div> 
     </div>
     </div>
     
