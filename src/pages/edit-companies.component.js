@@ -11,6 +11,7 @@ class EditCompanies extends Component {
             name: '',
             email: '',
             logo: '',
+            logoname: '',
             website: '',
             errors: '',
             nameerror: '',
@@ -32,7 +33,7 @@ class EditCompanies extends Component {
                 this.setState({
                     name:  response.data.name == null ? '':  response.data.name ,
                     email: response.data.email== null ? '':  response.data.email ,
-                    logo: response.data.logo== null ? '':  response.data.logo ,
+                    logoname: response.data.logo== null ? '':  SERVER_URL+'/storage/logos/'+response.data.logo,
                     website:  response.data.website== null ? '':  response.data.website ,
                 })   
             },
@@ -56,7 +57,7 @@ class EditCompanies extends Component {
 
     onChangeCompaniesLogo = (e) => {
         this.setState({
-            logo: e.target.files[0], success: ''
+            logo: e.target.files[0], success: '', logoname: ''
         });
     }
 
@@ -102,7 +103,7 @@ class EditCompanies extends Component {
 
 
     render() {
-        const {email, name, website, success, nameerror} = this.state;
+        const {email, name, website, success, logoname, nameerror} = this.state;
         return (
             <div>
             <h3 align="center">Update Company</h3>
@@ -131,6 +132,7 @@ class EditCompanies extends Component {
 
                 <div className="form-group">
                         <label>Logo: </label>
+                {logoname!='' ? <img style={{width: '50px'}} src={logoname} alt="img" />: '' } 
                         <input 
                                 type="file" 
                                 className="form-control"
