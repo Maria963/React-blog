@@ -43,29 +43,15 @@ class CreateCompanies extends Component {
     }
 
     onSubmit = (e) => {
-        console.log(localStorage.getItem('access_token'));
         e.preventDefault();
         const { name, email,logo, website }  = this.state;
-        console.log(`Form submitted:`);
-        console.log(`Name: ${this.state.name}`);
-        console.log(`Email: ${this.state.email}`);
-        console.log(`Logo: ${this.state.logo}`);
-        console.log(`Website: ${this.state.website}`);
+         console.log(window.localStorage.getItem('access_token'));
 
-      /*  axios.get('http://127.0.0.1:8001/api/companies')
-            .then(res => console.log(res.data));
-*/
-        
            const newCompanies = new FormData();
            newCompanies.append('name', name);
            newCompanies.append('email', email);
            newCompanies.append('logo', logo);
            newCompanies.append('website', website);
-        
-           console.log(newCompanies);
-          /*let config = {
-            headers: {'Authorization': "bearer " + localStorage.getItem('access_token')}
-           };*/
 
         axios.post(SERVER_URL+'/api/companies', newCompanies,{
             headers: {

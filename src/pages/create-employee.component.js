@@ -86,7 +86,12 @@ class CreateEmployee  extends Component {
         console.log(newEmployee);
 
 
-         axios.post( SERVER_URL+'/api/employees', newEmployee)
+         axios.post( SERVER_URL+'/api/employees', newEmployee, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                'Content-Type': 'application/json'
+            }
+        })
          .then(res => 
             this.setState({
                 success: 'Employee created',

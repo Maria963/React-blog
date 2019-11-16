@@ -78,8 +78,12 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
         const  {success} = this.state;
         return (
             <div>
-                <h3>Employees List</h3>
-                
+                <div className="row">
+                    <h3>Employees List</h3>
+                    <div className="navbar-item">
+                        <Link to="createemployee" className="nav-link">Create Employee</Link>
+                    </div> 
+                </div>
                 <div className="valid-feedback" style={{display: 'block'}}>
                     {success}
                 </div>

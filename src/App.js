@@ -14,51 +14,12 @@ import './App.css';
 
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-       isAdmin:  isAuth()
-    };
-
-}
-
-  /*  logout = () => {
-      logout();
-    }*/
-
     render() {
         console.log(isAuth());
         return (
           <Router>
           <div className="container">
-            {/* <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to="/home" className="nav-link">Home</Link>
-              <div className="collpase navbar-collapse">
-                <ul className="navbar-nav mr-auto">
-                  <li className="navbar-item">
-                    <Link to="/create" className="nav-link">Create Companies</Link>
-                  </li> 
-                  <li className="navbar-item">
-                    <Link to="/companies" className="nav-link">Companies</Link>
-                  </li> 
-                  <li className="navbar-item">
-                    <Link to="createemployee" className="nav-link">Create Employee</Link>
-                  </li> 
-                  <li className="navbar-item">
-                    <Link to="/employees" className="nav-link">Employee</Link>
-                  </li> 
-                  { console.log(isAuth(), isAdmin) }
-                  {!isAuth()?  <li className="navbar-item">
-                    <Link to="/login" className="nav-link">Login</Link>
-                  </li> : '' }
-                  {isAuth()?   <li className="navbar-item">
-                    <Link to="/login" onClick={this.logout} className="nav-link">Logout</Link>
-                  </li> : '' }                  
-                </ul>
-              </div>
-            </nav> */}
-            <br/>
-            
+
             <Route path="/login" exact component={LoginPage} />
             <PrivateRoute exact path="/" component={HomePage} />
             <PrivateRoute exact path="/home" component={HomePage} />

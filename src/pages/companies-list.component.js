@@ -16,12 +16,6 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
     }
 
     componentDidMount() {
-       /* {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
-        }) */
 
         axios.get(SERVER_URL+'/api/companies',
         {
@@ -85,7 +79,12 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
         const  {success} = this.state;
         return (
             <div>
-                <h3>Company List</h3>
+                <div className="row">
+                    <h3>Company List</h3>
+                    <div className="navbar-item">
+                    <Link to="/create" className="nav-link">Create Companies</Link>
+                    </div> 
+                </div>
                 <div className="valid-feedback" style={{display: 'block'}}>
                     {success}
                 </div>
