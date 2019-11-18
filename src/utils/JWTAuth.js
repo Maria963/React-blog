@@ -1,9 +1,60 @@
 import axios from 'axios';
+import { func } from 'prop-types';
 const SERVER_URL = "http://127.0.0.1:8000"
+
+const Auth = axios.create();
+
+
+Auth.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("access_token");
+      window.location.href = "/login";
+     // history.push("/login");
+    }
+   
+  }
+);
+
+
+
+function getCompanies () {
+  try {
+          let res =  Auth.get(SERVER_URL+'/api/companies',
+          {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                  'Content-Type': 'application/json'
+              }
+          });
+          return res;
+      }
+    catch (error) {
+    console.error(error)
+  }
+    }
+
+ function delCompany (id) {
+   try {
+     let res =  axios.delete(SERVER_URL+'/api/companies/'+id, {
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  } );
+   return res;
+ }
+   catch (error) {
+    console.error(error)
+  }
+ }   
+
 
 const login = async (data) => {
     const LOGIN_ENDPOINT = `${SERVER_URL}/api/login`;
-    console.log('ddd');
     try {
         let response = await axios.post(LOGIN_ENDPOINT, data);
          console.log(response)
@@ -52,4 +103,4 @@ const isAuth = () => {
 }
 
 
-export { login, isAuth, SERVER_URL }
+export { login, isAuth, SERVER_URL ,Auth, getCompanies, delCompany}

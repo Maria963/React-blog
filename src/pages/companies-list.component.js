@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import {  SERVER_URL, getCompanies, delCompany } from "../utils/JWTAuth.js";
 
 
  class CompaniesList extends Component {
@@ -15,23 +15,21 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
 
     }
 
-    componentDidMount() {
+    componentDidMount = async() => {
 
-        axios.get(SERVER_URL+'/api/companies',
-        {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
+            try {
+                
+                let response = await getCompanies();
+                if (response.status==200) {
+                    this.setState({ companies: response.data });
+
+                }
+                
+            } catch (error) {
+              console.error(error)
         }
-            )
-            .then(response => {
-                this.setState({ companies: response.data });
-            })
-            .catch(function (error){
-                console.log(error);
-            })
     }
+
 
     removeCompany = (id) => {
         console.log(id);
@@ -42,18 +40,20 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
         })
       }
 
-    deleteCompany = (id) =>  {
+    deleteCompany = async (id) =>  {
         this.removeCompany(id);
-            axios.delete(SERVER_URL+'/api/companies/'+id, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json'
-                }
-            } )
-            .then((res) =>  this.setState({
-                success: 'Company deleted succesfully',
-            }))
+             try {
+                 let res = await delCompany(id);
+             if (res.status==200) {
+                this.setState({
+                    success: 'Company deleted',
+                }) 
+             
             }
+        } catch (error) {
+
+        }
+    }
 
 
     companyList = () => {
