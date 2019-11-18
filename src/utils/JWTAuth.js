@@ -6,16 +6,12 @@ const Auth = axios.create();
 
 
 Auth.interceptors.response.use(
-  response => {
-    return response;
-  },
+  response => response,
   error => {
     if (error.response.status === 401) {
       localStorage.removeItem("access_token");
       window.location.href = "/login";
-     // history.push("/login");
     }
-   
   }
 );
 
