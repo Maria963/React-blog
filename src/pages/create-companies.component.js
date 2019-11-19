@@ -74,7 +74,7 @@ class CreateCompanies extends Component {
                 console.log(error);
             }
             }
-
+ 
 
     render() {
         const {email, name, website, success, nameerror, inputKey } = this.state;
