@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import  LoginPage  from './pages/LoginPage';
 import  HomePage  from './pages/HomePage';
 import  CompaniesList  from './pages/companies-list.component';
@@ -8,18 +8,15 @@ import EditCompanies from './pages/edit-companies.component';
 import UpdateEmployee from './pages/edit-employee.component';
 import EmployeesList from './pages/employee-list.component';
 import CreateEmployee from './pages/create-employee.component';
-import {  logout, isAuth } from "./utils/JWTAuth.js";
 import { PrivateRoute } from './components/PrivateRoute';
 import './App.css';
 
 
 class App extends Component {
     render() {
-        console.log(isAuth());
         return (
           <Router>
           <div className="container">
-
             <Route path="/login" exact component={LoginPage} />
             <PrivateRoute exact path="/" component={HomePage} />
             <PrivateRoute exact path="/home" component={HomePage} />
@@ -28,8 +25,7 @@ class App extends Component {
             <PrivateRoute path="/companies/:id"  component={EditCompanies} />
             <PrivateRoute path="/createemployee" exact component={CreateEmployee} />
             <PrivateRoute path="/employees" exact component={EmployeesList} />
-            <PrivateRoute path="/employees/:id"  component={UpdateEmployee} />
-            
+            <PrivateRoute path="/employees/:id"  component={UpdateEmployee} />           
           </div>
         </Router>
   

@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
-import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import { editEmployee, getCompanies, getEmployee } from "../utils/JWTAuth.js";
 
 
 class UpdateEmployee  extends Component {
@@ -22,40 +21,28 @@ class UpdateEmployee  extends Component {
           })
     }
 
-    componentDidMount() {
-        axios.get(SERVER_URL+'/api/companies',{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
+    async componentDidMount() {
+        let employee_id = this.props.match.params.id;
+        try {
+                
+            let response = await getCompanies();
+            let employee = await getEmployee(employee_id);
+            if (response.status===200) {
                 this.setState({ companies: response.data });
-            })
-            .catch(function (error){
-                console.log(error);
-            })
-       
-        console.log(this.props.match.params.id);
-        axios.get(SERVER_URL+'/api/employees/'+this.props.match.params.id, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
             }
-        })
-            .then(response => {
+            if (employee.status===200) {
                 this.setState({
-                    first_name:  response.data.first_name == null ? '':  response.data.first_name ,
-                    last_name: response.data.last_name== null ? '':  response.data.last_name ,
-                    company_id: response.data.company_id== null ? '':  response.data.company_id ,
-                    email:  response.data.email== null ? '':  response.data.email ,
-                    phone:  response.data.phone==null ? '': response.data.phone
+                    first_name:  employee.data.first_name == null ? '':  employee.data.first_name ,
+                    last_name: employee.data.last_name== null ? '':  employee.data.last_name ,
+                    company_id: employee.data.company_id== null ? '':  employee.data.company_id ,
+                    email:  employee.data.email== null ? '':  employee.data.email ,
+                    phone:  employee.data.phone==null ? '': employee.data.phone
                 })   
-            },
-)
-            .catch(function (error) {
-                console.log(error);
-            })
+            }
+            
+        } catch (error) {
+          console.error(error)
+       }
     }
 
   onChangeEmployeeFirstname = (e) => {
@@ -88,12 +75,9 @@ class UpdateEmployee  extends Component {
         });
     }
 
-    onSubmit = (e) => {
-       
-        console.log(localStorage.getItem('access_token'));
+    onSubmit = async (e) => {
         e.preventDefault();
         const {first_name, last_name, company_id, email, phone}  = this.state;
-        console.log(`Form submitted:`);
 
         const updateEmployee = {
             first_name,
@@ -104,28 +88,30 @@ class UpdateEmployee  extends Component {
         };
 
 
+         let employee_id = this.props.match.params.id;
 
-         axios.post( SERVER_URL+'/api/employees/'+this.props.match.params.id, updateEmployee,{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
+         try {
+            let res = await editEmployee(employee_id, updateEmployee);
+            if (res.status===200) {
+              this.setState({
+                  success: 'Employee updated',
+              }); }
+           
+            else {
+              this.setState({
+                  nameerror: res.data.errors.first_name,
+                  lastnameerror: res.data.errors.last_name
+               })
             }
-        })
-         .then(res => 
-            this.setState({
-                success: 'Employee updated',
-            }))
-         .catch((error) => {
-            this.setState({
-               nameerror: error.response.data.errors.first_name,
-               lastnameerror: error.response.data.errors.last_name
-            })
-        })
-    }
+          }
+          catch (error) {
+              console.log(error);
+          }
+        }
 
     companiesList = () => {
         const { companies, company_id } = this.state;
-        console.log(companies);
+
         return companies.map((company) => {
             return <option value={company.id} key={company.id} selected = { company_id === company.id ? 'selected' : ''}>{company.name}</option>
         })

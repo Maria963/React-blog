@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import { createCompanies } from "../utils/JWTAuth.js";
 
 class CreateCompanies extends Component {
     constructor(props) {
@@ -42,41 +41,40 @@ class CreateCompanies extends Component {
         });
     }
 
-    onSubmit = (e) => {
+    onSubmit = async (e) =>  {
         e.preventDefault();
         const { name, email,logo, website }  = this.state;
-         console.log(window.localStorage.getItem('access_token'));
-
            const newCompanies = new FormData();
            newCompanies.append('name', name);
            newCompanies.append('email', email);
            newCompanies.append('logo', logo);
            newCompanies.append('website', website);
-
-        axios.post(SERVER_URL+'/api/companies', newCompanies,{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
+          
+           try {
+              let res = await createCompanies(newCompanies);
+              console.log(res);
+              if (res.status===200) {
+                this.setState({
+                    success: 'Company created',
+                    name: '',
+                    email: '',
+                    logo: '',
+                    website: '',
+                    inputKey: Date.now()
+                }); }
+             
+              else {
+                this.setState({
+                    errors: res.data.message,
+                    nameerror: res.data.errors.name,
+                 })
+              }
             }
-        })
-         .then(res => 
-            this.setState({
-                success: 'Company created',
-                name: '',
-                email: '',
-                logo: '',
-                website: '',
-                inputKey: Date.now()
-            })
-         )
-         .catch((error) => {
-            this.setState({
-               errors: error.response.data.message,
-               nameerror: error.response.data.errors.name,
-            })
-                console.log(error.response);
-            })    
-    }
+            catch (error) {
+                console.log(error);
+            }
+            }
+
 
     render() {
         const {email, name, website, success, nameerror, inputKey } = this.state;

@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
-import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import {  SERVER_URL, editCompanies, getCompany } from "../utils/JWTAuth.js";
 
 class EditCompanies extends Component {
     constructor(props) {
@@ -20,27 +19,23 @@ class EditCompanies extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(this.props.match.params.id);
-       //const { handle } = this.props.match.params.id
-        axios.get(SERVER_URL+'/api/companies/'+this.props.match.params.id,{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
+  async   componentDidMount() {
+        let company_id = this.props.match.params.id;
+        try {
+            let response = await getCompany(company_id)
+            if (response) {
                 this.setState({
                     name:  response.data.name == null ? '':  response.data.name ,
                     email: response.data.email== null ? '':  response.data.email ,
                     logoname: response.data.logo== null ? '':  SERVER_URL+'/storage/logos/'+response.data.logo,
                     website:  response.data.website== null ? '':  response.data.website ,
-                })   
-            },
-)
-            .catch(function (error) {
+                });   
+            }
+        }
+       
+        catch (error) {
                 console.log(error);
-            })
+        }
     }
 
     onChangeCompaniesName = (e) => {
@@ -67,39 +62,35 @@ class EditCompanies extends Component {
         });
     }
 
-    onSubmit = (e) =>  {
+    onSubmit = async (e) =>  {
         e.preventDefault();
         const { name, email,logo, website }  = this.state;
-        console.log(`Form submitted:`);
-        console.log(`Name: ${this.state.name}`);
-        console.log(`Email: ${this.state.email}`);
-        console.log(`Logo: ${this.state.logo}`);
-        console.log(`Website: ${this.state.website}`);
-
+        let company_id = this.props.match.params.id;
         const updateCompanies = new FormData();
         updateCompanies.append('name', name);
         updateCompanies.append('email', email);
         updateCompanies.append('logo', logo);
         updateCompanies.append('website', website);
+        
 
-        console.log(updateCompanies);
-        axios.post(SERVER_URL+'/api/companies/'+this.props.match.params.id, updateCompanies,{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
+        try {
+            let res = await editCompanies(company_id, updateCompanies);
+            if (res.status===200) {
+              this.setState({
+                  success: 'Company updated',
+              }); }
+           
+            else {
+              this.setState({
+                  nameerror: res.data.errors.name,
+               })
             }
-        })
-            .then(res => 
-                this.setState({
-                    success: 'Company updated',
-                }))
-            .catch((error) => {
-                this.setState({
-                   nameerror: error.response.data.errors.name,
-                })
-            })
-       //this.props.history.push('/companies');
-    }
+          }
+          catch (error) {
+              console.log(error);
+          }
+        }
+    
 
 
     render() {
@@ -132,7 +123,7 @@ class EditCompanies extends Component {
 
                 <div className="form-group">
                         <label>Logo: </label>
-                {logoname!='' ? <img style={{width: '50px'}} src={logoname} alt="img" />: '' } 
+                {logoname!=='' ? <img style={{width: '50px'}} src={logoname} alt="img" />: '' } 
                         <input 
                                 type="file" 
                                 className="form-control"

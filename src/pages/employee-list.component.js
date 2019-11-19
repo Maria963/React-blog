@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import {  getEmployees, delEmployee } from "../utils/JWTAuth.js";
 
 
 
@@ -16,21 +15,25 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
         };
     }
 
-    componentDidMount() {
-        axios.get(SERVER_URL+'/api/employees',{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response =>   {
-              this.setState({ employees: response.data });
-        })
-        .catch(err => {
+   async  componentDidMount() {
+    try {
+                
+        let response = await getEmployees();
+        if (response.status===200) {
+            this.setState({ employees: response.data });
+
+        }
+        else {
             this.setState({
-                error: err.response.data.error,
+                error: response.data.error,
             })
-        })
+        }
+        
+    } catch (error) {
+      console.error(error)
+   }
+
+    
     }
 
 
@@ -44,17 +47,26 @@ import {  SERVER_URL } from "../utils/JWTAuth.js";
       }
 
 
-    deleteEmployee = (id) =>  {
+    deleteEmployee = async (id) =>  {
         this.removeEmployee(id);
-            axios.delete(SERVER_URL+'/api/employees/'+id,{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then((res) =>  this.setState({
-                success: 'Employee deleted succesfully',
-            }))
+        try {
+                
+            let response = await delEmployee(id);
+            if (response.status===204) {
+                this.setState({
+                    success: 'Employee deleted',
+                })
+    
+            }
+            else {
+                this.setState({
+                    error: response.data.error,
+                })
+            }
+            
+        } catch (error) {
+          console.error(error)
+       }
     }
 
     employeesList() {

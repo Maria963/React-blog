@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
-import axios from 'axios';
-import {  SERVER_URL } from "../utils/JWTAuth.js";
+import { getCompanies , createEmployees} from "../utils/JWTAuth.js";
 
 
 class CreateEmployee  extends Component {
@@ -21,20 +20,26 @@ class CreateEmployee  extends Component {
         }
     }
 
-    componentDidMount() {
-        axios.get(SERVER_URL+'/api/companies',{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                this.setState({ companies: response.data });
-            })
-            .catch(function (error){
-                console.log(error);
-            })
-    }
+   async  componentDidMount() {
+    try {
+        let res = await getCompanies ();
+        console.log(res);
+        if (res.status===200) {
+            this.setState({ companies: res.data }); }
+       
+        else {
+          this.setState({
+              errors: res.data.message,
+              nameerror: res.data.errors.name,
+           })
+        }
+      }
+      catch (error) {
+          console.log(error);
+      }
+      }
+       
+    
 
     onChangeEmployeeFirstname = (e) => {
         this.setState({
@@ -67,15 +72,10 @@ class CreateEmployee  extends Component {
     }
 
 
-    onSubmit = (e) => {
-       
-     //   console.log(localStorage.getItem('access_token'));
+     onSubmit = async (e) => {
         e.preventDefault();
-        const {first_name, last_name, company_id, email, phone}  = this.state;
-        console.log(`Form submitted:`);
-     
-
-       const newEmployee = {
+        const {first_name, last_name, company_id, email, phone}  = this.state; 
+         const newEmployee = {
             first_name,
             last_name,
             email,
@@ -83,34 +83,31 @@ class CreateEmployee  extends Component {
             phone
         };
 
-        console.log(newEmployee);
-
-
-         axios.post( SERVER_URL+'/api/employees', newEmployee, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
+        try {
+            let response = await createEmployees(newEmployee);
+          
+            if (response.status===200) {
+                this.setState({
+                    success: 'Employee created',
+                    first_name: '',
+                    last_name: '',
+                    company_id: '',
+                    email: '',
+                    phone: '',
+                }); 
             }
-        })
-         .then(res => 
-            this.setState({
-                success: 'Employee created',
-            }))
-        .catch((error) => {
-            this.setState({
-                nameerror: error.response.data.errors.first_name,
-                lastnameerror: error.response.data.errors.last_name
-            })
-        })
-        
-          this.setState({
-            first_name: '',
-            last_name: '',
-            company_id: '',
-            email: '',
-            phone: '',
-          })
-    }
+           
+            else {
+                this.setState({
+                    nameerror: response.data.errors.first_name,
+                    lastnameerror: response.data.errors.last_name
+                });
+          }
+        }
+          catch (error) {
+              console.log('ddsd',error);
+          }
+        }
 
 
     companiesList = () => {

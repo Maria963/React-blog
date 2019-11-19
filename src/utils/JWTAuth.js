@@ -12,14 +12,15 @@ Auth.interceptors.response.use(
       localStorage.removeItem("access_token");
       window.location.href = "/login";
     }
+    throw error;
   }
 );
 
 
 
-function getCompanies () {
+ function getCompanies () {
   try {
-          let res =  Auth.get(SERVER_URL+'/api/companies',
+          let res =   Auth.get(SERVER_URL+'/api/companies',
           {
               headers: {
                   Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -35,7 +36,7 @@ function getCompanies () {
 
  function delCompany (id) {
    try {
-     let res =  axios.delete(SERVER_URL+'/api/companies/'+id, {
+     let res =  Auth.delete(SERVER_URL+'/api/companies/'+id, {
       headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
@@ -48,11 +49,143 @@ function getCompanies () {
   }
  }   
 
+async function createCompanies (data) {
+  try {
+    let res = await Auth.post(SERVER_URL+'/api/companies', data,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
 
-const login = async (data) => {
+  return res;
+}
+  catch (error) {
+   return error.response;
+ }
+ }
+
+ async function editCompanies (id,data) {
+  try {
+    let res =  await Auth.post(SERVER_URL+'/api/companies/'+id, data,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+  return res;
+}
+  catch (error) {
+   return error.response;
+ }
+ }
+
+
+ async function getCompany (id) {
+  try {
+    let res =  await Auth.get(SERVER_URL+'/api/companies/'+id,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+  return res;
+}
+  catch (error) {
+   return error.response;
+ }
+ }
+
+
+
+
+ function getEmployees () {
+  try {
+          let res =  Auth.get(SERVER_URL+'/api/employees',{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                'Content-Type': 'application/json'
+            }
+          })
+          return res;
+      }
+    catch (error) {
+      return error.response;
+  }
+    }
+
+
+function delEmployee (id) {
+  try {
+    let res =  Auth.delete(SERVER_URL+'/api/employees/'+id,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+  console.log(res);
+   return res;
+  }
+  catch (error) {
+    
+}
+}    
+
+
+async function createEmployees (data) {
+  try {
+     let res = await Auth.post( SERVER_URL+'/api/employees', data, {
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+
+    return res; 
+  }
+  catch (error) {
+    console.log('ddd', error.response)
+    return error.response;
+  }
+}
+
+async function editEmployee (id,data) {
+  try {
+    let res =  await Auth.post(SERVER_URL+'/api/employees/'+id, data,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+  return res;
+}
+  catch (error) {
+   return error.response;
+ }
+ }
+
+ async function getEmployee (id) {
+  try {
+    let res =  await Auth.get(SERVER_URL+'/api/employees/'+id,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+      }
+  })
+  return res;
+}
+  catch (error) {
+   return error.response;
+ }
+ }
+
+
+
+
+async function login (data) {
     const LOGIN_ENDPOINT = `${SERVER_URL}/api/login`;
     try {
-        let response = await axios.post(LOGIN_ENDPOINT, data);
+        let response = await Auth.post(LOGIN_ENDPOINT, data);
          console.log(response)
       //  if(response.status === 200 && response.data.remember_token && response.data.expireAt){
         if(response.status === 200 && response.data.success===true){
@@ -67,6 +200,8 @@ const login = async (data) => {
         console.log(e);
     }
 }
+
+
 
 /*
 const register = async (data) => {
@@ -99,4 +234,4 @@ const isAuth = () => {
 }
 
 
-export { login, isAuth, SERVER_URL ,Auth, getCompanies, delCompany}
+export { login, isAuth, SERVER_URL ,Auth, getEmployee, editEmployee, createEmployees ,delEmployee, getCompanies, delCompany,createCompanies, editCompanies,getEmployees, getCompany}

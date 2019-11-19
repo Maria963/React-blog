@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {  isAuth } from "../utils/JWTAuth.js";
 
 const Header = (props) => {
 

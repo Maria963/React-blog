@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import {  SERVER_URL, getCompanies, delCompany } from "../utils/JWTAuth.js";
 
 
@@ -15,12 +14,11 @@ import {  SERVER_URL, getCompanies, delCompany } from "../utils/JWTAuth.js";
 
     }
 
-    componentDidMount = async() => {
-
+    async componentDidMount() {
             try {
                 
                 let response = await getCompanies();
-                if (response.status==200) {
+                if (response.status===200) {
                     this.setState({ companies: response.data });
 
                 }
@@ -40,11 +38,12 @@ import {  SERVER_URL, getCompanies, delCompany } from "../utils/JWTAuth.js";
         })
       }
 
-    deleteCompany = async (id) =>  {
+      async deleteCompany (id)  {
         this.removeCompany(id);
              try {
                  let res = await delCompany(id);
-             if (res.status==200) {
+                 console.log(res);
+             if (res.status===200) {
                 this.setState({
                     success: 'Company deleted',
                 }) 
