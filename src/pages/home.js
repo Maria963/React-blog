@@ -1,4 +1,5 @@
 import React from "react";
+import Api from "../utils/api";
 
 class HomePage extends React.Component {
   render() {
