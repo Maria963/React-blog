@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import Api from "../../utils/api";
+import Input from "../../components/basic/input-button";
+import Submit from "../../components/basic/submit-button";
+import Errors from "../../components/basic/errors";
+import Success from "../../components/basic/success";
 
 class CreateCompanies extends Component {
   constructor(props) {
@@ -81,58 +85,33 @@ class CreateCompanies extends Component {
       <div style={{ marginTop: 10 }}>
         <h3>Create New Company</h3>
         <form encType="multipart/form-data" onSubmit={this.onSubmit}>
-          <div className="invalid-feedback" style={{ display: "block" }}>
-            {nameerror}
-          </div>
-          <div className="form-group">
-            <label>Name: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={name}
-              onChange={this.onChangeCompaniesName}
-            />
-          </div>
-          <div className="form-group">
-            <label>Email: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={email}
-              onChange={this.onChangeCompaniesEmail}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Logo: </label>
-            <input
-              type="file"
-              className="form-control"
-              key={inputKey}
-              onChange={this.onChangeCompaniesLogo}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Website: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={website}
-              onChange={this.onChangeCompaniesWebsite}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Create Company"
-              className="btn btn-primary"
-            />
-          </div>
-          <div className="valid-feedback" style={{ display: "block" }}>
-            {success}
-          </div>
+          <Errors name={nameerror} />
+          <Input
+            name="Name:"
+            type="text"
+            value={name}
+            changeFunction={this.onChangeCompaniesName}
+          />
+          <Input
+            name="Email:"
+            type="email"
+            value={email}
+            changeFunction={this.onChangeCompaniesEmail}
+          />
+          <Input
+            name="Logo:"
+            type="file"
+            key={inputKey}
+            changeFunction={this.onChangeCompaniesLogo}
+          />
+          <Input
+            name="website:"
+            type="text"
+            value={website}
+            changeFunction={this.onChangeCompaniesWebsite}
+          />
+          <Submit value="Create Company" />
+          <Success name={success} />
         </form>
       </div>
     );

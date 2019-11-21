@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import Api from "../../utils/api";
+import Input from "../../components/basic/input-button";
+import Submit from "../../components/basic/submit-button";
+import Errors from "../../components/basic/errors";
+import Success from "../../components/basic/success";
 
 class EditCompanies extends Component {
   constructor(props) {
@@ -32,9 +36,7 @@ class EditCompanies extends Component {
           website: response.data.website == null ? "" : response.data.website
         });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   onChangeCompaniesName = e => {
@@ -97,61 +99,33 @@ class EditCompanies extends Component {
       <div>
         <h3 align="center">Update Company</h3>
         <form onSubmit={this.onSubmit}>
-          <div className="invalid-feedback" style={{ display: "block" }}>
-            {nameerror}
-          </div>
-          <div className="form-group">
-            <label>Name: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={name}
-              onChange={this.onChangeCompaniesName}
-            />
-          </div>
-          <div className="form-group">
-            <label>Email: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={email}
-              onChange={this.onChangeCompaniesEmail}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Logo: </label>
-            {logoname !== "" ? (
-              <img style={{ width: "50px" }} src={logoname} alt="img" />
-            ) : (
-              ""
-            )}
-            <input
-              type="file"
-              className="form-control"
-              onChange={this.onChangeCompaniesLogo}
-            />
-          </div>
-          <div className="form-group">
-            <label>Website: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={website}
-              onChange={this.onChangeCompaniesWebsite}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Update Company"
-              className="btn btn-primary"
-            />
-          </div>
-          <div className="valid-feedback" style={{ display: "block" }}>
-            {success}
-          </div>
+          <Errors name={nameerror} />
+          <Input
+            name="Name:"
+            type="text"
+            value={name}
+            changeFunction={this.onChangeCompaniesName}
+          />
+          <Input
+            name="Email:"
+            type="email"
+            value={email}
+            changeFunction={this.onChangeCompaniesEmail}
+          />
+          <Input
+            name="Logo:"
+            type="file"
+            logoname={logoname}
+            changeFunction={this.onChangeCompaniesLogo}
+          />
+          <Input
+            name="website:"
+            type="text"
+            value={website}
+            changeFunction={this.onChangeCompaniesWebsite}
+          />
+          <Submit value="Update Company" />
+          <Success name={success} />
         </form>
       </div>
     );

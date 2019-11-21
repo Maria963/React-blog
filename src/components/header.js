@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const Header = props => {
   function logout() {
-    console.log(props);
     localStorage.removeItem("access_token");
     props.history.push("/login");
   }

@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import Api from "../../utils/api";
+import Input from "../../components/basic/input-button";
+import Submit from "../../components/basic/submit-button";
+import Select from "../../components/basic/select";
+import Errors from "../../components/basic/errors";
+import Success from "../../components/basic/success";
 
 class CreateEmployee extends Component {
   constructor(props) {
@@ -24,9 +29,7 @@ class CreateEmployee extends Component {
       if (res.status === 200) {
         this.setState({ companies: res.data });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   onChangeEmployeeFirstname = e => {
@@ -79,7 +82,6 @@ class CreateEmployee extends Component {
 
     try {
       let response = await Api.createEmployees(newEmployee);
-      console.log(response);
       if (response.status === 201) {
         this.setState({
           success: "Employee added",
@@ -123,72 +125,41 @@ class CreateEmployee extends Component {
       <div style={{ marginTop: 10 }}>
         <h3>Create New Employee</h3>
         <form encType="multipart/form-data" onSubmit={this.onSubmit}>
-          <div className="invalid-feedback" style={{ display: "block" }}>
-            {nameerror}
-            <br />
-            {lastnameerror}
-          </div>
-          <div className="form-group">
-            <label>Firstname: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={first_name}
-              onChange={this.onChangeEmployeeFirstname}
-            />
-          </div>
-          <div className="form-group">
-            <label>Lastname:</label>
-            <input
-              type="text"
-              className="form-control"
-              value={last_name}
-              onChange={this.onChangeEmployeeLastname}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Company name</label>
-            <select
-              className="form-control"
-              name="company_id"
-              onChange={this.onChangeEmployeeCompany}
-            >
-              <option value="">Choose Company</option>
-              {this.companiesList()}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="text"
-              className="form-control"
-              value={email}
-              onChange={this.onChangeEmployeeEmail}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Phone: </label>
-            <input
-              type="text"
-              className="form-control"
-              value={phone}
-              onChange={this.onChangeEmployeePhone}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Create Employee"
-              className="btn btn-primary"
-            />
-          </div>
-          <div className="valid-feedback" style={{ display: "block" }}>
-            {success}
-          </div>
+          <Errors name={nameerror} />
+          <Errors name={lastnameerror} />
+          <Input
+            name="Firstname:"
+            type="text"
+            value={first_name}
+            changeFunction={this.onChangeEmployeeFirstname}
+          />
+          <Input
+            name="Lastname:"
+            type="text"
+            value={last_name}
+            changeFunction={this.onChangeEmployeeLastname}
+          />
+          <Select
+            name="Company name"
+            id="company_id"
+            changeFunction={this.onChangeEmployeeCompany}
+            default="Choose Company"
+            optionList={this.companiesList()}
+          />
+          <Input
+            name="Email:"
+            type="email"
+            value={email}
+            changeFunction={this.onChangeEmployeeEmail}
+          />
+          <Input
+            name="Phone:"
+            type="text"
+            value={phone}
+            changeFunction={this.onChangeEmployeePhone}
+          />
+          <Submit value="Create Employee" />
+          <Success name={success} />
         </form>
       </div>
     );

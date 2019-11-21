@@ -28,11 +28,9 @@ class EmployeesList extends Component {
   }
 
   removeEmployee = id => {
-    console.log(id);
     const removeFav = this.state.employees.filter(
       employee => employee.id !== id
     );
-    console.log(removeFav);
     this.setState({
       employees: removeFav
     });

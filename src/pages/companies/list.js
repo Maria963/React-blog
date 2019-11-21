@@ -23,9 +23,7 @@ class CompaniesList extends Component {
   }
 
   removeCompany = id => {
-    console.log(id);
     const removeFav = this.state.companies.filter(company => company.id !== id);
-    console.log(removeFav);
     this.setState({
       companies: removeFav
     });
